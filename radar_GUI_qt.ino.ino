@@ -26,17 +26,20 @@ void setup() {
 
 void loop() {
   getDistance();
-  moveServoAutomatically();
+  readSerialCommand(); // Read command from serial
   outputDistance();
   delay(50);
 }
 
-// Function to move servo automatically based on distance
-void moveServoAutomatically() {
-  if (distance < 50) {  // If the object is within 50 cm
-    servoSetting = map(distance, 0, 50, 0, 180);  // Map distance to servo angle
-    myservo.write(servoSetting);
-    delay(10); // Add a small delay to avoid data conflicts
+// Function to read servo angle command from serial
+void readSerialCommand() {
+  if (Serial.available() > 0) {
+    String command = Serial.readStringUntil('\n');
+    int angle = command.toInt();
+    if (angle >= 0 && angle <= 180) {
+      myservo.write(angle);
+      servoSetting = angle;
+    }
   }
 }
 
