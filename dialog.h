@@ -34,7 +34,7 @@ private slots:
     void on_button45_clicked();
     void on_button135_clicked();
     void on_button_auto_clicked();
-    void on_start_auto_clicked(); // Tambahkan slot untuk start otomatis
+    // void on_start_auto_clicked();
     void updateServoAuto();
     void clearOldDetectionPoints();
     void updateDetectionPoint(float angle, float distance);
@@ -59,7 +59,7 @@ private:
     QByteArray serialData;
     QString serialBuffer;
     QString servoSetting;
-    float calculateServoAngle(float distance);
+    // float calculateServoAngle(float distance);
     QList<QGraphicsRectItem*> detectionPoints;
     QTimer *autoTimer;
 };
