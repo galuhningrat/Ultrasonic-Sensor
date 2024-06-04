@@ -86,7 +86,7 @@ void Dialog::readSerial()
             float angle = dataList[0].toFloat(&ok1);
             float distance = dataList[1].toFloat(&ok2);
 
-            if (ok1 && ok2) {
+            if (ok1 && ok2 && distance >= 0 && distance <= 500) { // Ensure distance is within 0-500 cm
                 qDebug() << "Parsed angle:" << angle << "Parsed distance:" << distance;
                 updateDetectionPoint(angle, distance);
 
@@ -94,7 +94,7 @@ void Dialog::readSerial()
                 QString rangeText = QString::number(distance, 'f', 2) + " cm";
                 ui->range->setText(rangeText);
             } else {
-                qDebug() << "Error: Invalid data received" << dataString;
+                qDebug() << "Error: Invalid data received or out of range" << dataString;
             }
         } else {
             qDebug() << "Error: Invalid data format" << dataString;
@@ -107,7 +107,7 @@ void Dialog::updateDetectionPoint(float angle, float distance)
     // Clear old detection points first
     clearOldDetectionPoints();
 
-    if (distance < 500) {  // Update condition to check if distance is within 500 cm
+    if (distance < 500) {  // Ensure distance is within 500 cm
         float radius = distance * 0.9; // Adjust the scaling factor for the visualization
         float x = radius * qCos(qDegreesToRadians(angle));
         float y = radius * qSin(qDegreesToRadians(angle));
