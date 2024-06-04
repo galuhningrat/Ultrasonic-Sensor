@@ -1,5 +1,6 @@
 #include "dialog.h"
 #include "ui_dialog.h"
+#include <QtMath>
 
 Dialog::Dialog(QWidget *parent)
     : QDialog(parent)
@@ -61,7 +62,7 @@ Dialog::Dialog(QWidget *parent)
         QMessageBox::warning(this, "Port error", "Couldn't find Arduino");
     }
 
-    autoTimer = new QTimer(this); // Inisialisasi timer
+    autoTimer = new QTimer(this); // Initialize timer
     connect(autoTimer, &QTimer::timeout, this, &Dialog::updateServoAuto);
 }
 
@@ -106,8 +107,8 @@ void Dialog::updateDetectionPoint(float angle, float distance)
     // Clear old detection points first
     clearOldDetectionPoints();
 
-    if (distance < 100) {
-        float radius = distance * 4.5;
+    if (distance < 500) {  // Update condition to check if distance is within 500 cm
+        float radius = distance * 0.9; // Adjust the scaling factor for the visualization
         float x = radius * qCos(qDegreesToRadians(angle));
         float y = radius * qSin(qDegreesToRadians(angle));
         float xT = x + 505;
@@ -146,7 +147,8 @@ void Dialog::updateServo(QString command)
     needle->setPolygon(triangle);
 
     if (arduino->isWritable()) {
-        arduino->write(command.toStdString().c_str());
+        QString message = command + "\n";
+        arduino->write(message.toStdString().c_str());
     } else {
         qDebug() << "Could not write to serial";
     }
@@ -215,11 +217,6 @@ void Dialog::on_button_auto_clicked()
     }
 }
 
-void Dialog::on_start_auto_clicked()
-{
-    autoTimer->start(1000);
-}
-
 void Dialog::updateServoAuto()
 {
     // Function to automatically update the servo (e.g. sweep from 0 to 180 degrees)
@@ -241,17 +238,4 @@ void Dialog::updateServoAuto()
     updateServo(QString::number(angle));
     ui->angle->setText(QString::number(angle));
     ui->verticalSlider->setValue(angle);
-}
-
-float Dialog::calculateServoAngle(float distance)
-{
-    // Calculate servo angle based on distance (example calculation)
-    // You can modify this logic based on your requirements
-    float angle = 0.0;
-    if (distance < 100) {
-        angle = distance * 1.8; // Example calculation
-    } else {
-        angle = 180.0;
-    }
-    return angle;
 }
