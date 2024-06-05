@@ -1,0 +1,5 @@
+module RadarArduino
+typeinfo appRadarArduino.qmltypes
+prefer :/RadarArduino/
+Main 1.0 Main.qml
+
