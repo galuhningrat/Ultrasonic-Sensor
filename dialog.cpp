@@ -66,8 +66,7 @@ Dialog::Dialog(QWidget *parent)
     connect(autoTimer, &QTimer::timeout, this, &Dialog::updateServoAuto);
 }
 
-void Dialog::readSerial()
-{
+void Dialog::readSerial() {
     // Read data from serial port
     serialData.append(arduino->readAll());
 
@@ -95,15 +94,18 @@ void Dialog::readSerial()
                 ui->range->setText(rangeText);
             } else {
                 qDebug() << "Error: Invalid data received or out of range" << dataString;
+                // Clear the detection points if data is invalid
+                clearOldDetectionPoints();
             }
         } else {
             qDebug() << "Error: Invalid data format" << dataString;
+            // Clear the detection points if data format is invalid
+            clearOldDetectionPoints();
         }
     }
 }
 
-void Dialog::updateDetectionPoint(float angle, float distance)
-{
+void Dialog::updateDetectionPoint(float angle, float distance) {
     // Clear old detection points first
     clearOldDetectionPoints();
 
@@ -123,11 +125,11 @@ void Dialog::updateDetectionPoint(float angle, float distance)
         qDebug() << "Updated detection point at x:" << xT << "y:" << yT; // Debugging: Print coordinates of detection point
     } else {
         qDebug() << "Distance out of range:" << distance; // Debugging: Print distance if out of range
+        clearOldDetectionPoints();
     }
 }
 
-void Dialog::clearOldDetectionPoints()
-{
+void Dialog::clearOldDetectionPoints() {
     // Clear all old detection points from the scene
     foreach (QGraphicsRectItem* item, detectionPoints) {
         scene->removeItem(item);
