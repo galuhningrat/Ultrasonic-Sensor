@@ -85,22 +85,37 @@ void Dialog::readSerial() {
             float angle = dataList[0].toFloat(&ok1);
             float distance = dataList[1].toFloat(&ok2);
 
-            if (ok1 && ok2 && distance >= 0 && distance <= 500) { // Ensure distance is within 0-500 cm
-                qDebug() << "Parsed angle:" << angle << "Parsed distance:" << distance;
-                updateDetectionPoint(angle, distance);
+            if (ok1 && ok2) {
+                qDebug() << "Parsed angle:" << angle;
 
-                // Update range label in GUI
-                QString rangeText = QString::number(distance, 'f', 2) + " cm";
-                ui->range->setText(rangeText);
+                // Ensure distance is within 0-500 cm
+                if (distance >= 0 && distance <= 500) {
+                    qDebug() << "Parsed distance:" << distance;
+                    updateDetectionPoint(angle, distance);
+
+                    // Update range label in GUI
+                    QString rangeText = QString::number(distance, 'f', 2) + " cm";
+                    ui->range->setText(rangeText);
+                } else {
+                    // Set distance to 0 if out of range
+                    distance = 0;
+                    qDebug() << "Parsed distance:" << distance;
+
+                    // Clear the detection points if data is invalid
+                    clearOldDetectionPoints();
+                    ui->range->setText("0.00 cm"); // Set range to 0 if out of range
+                }
             } else {
-                qDebug() << "Error: Invalid data received or out of range" << dataString;
+                qDebug() << "Error: Invalid data received" << dataString;
                 // Clear the detection points if data is invalid
                 clearOldDetectionPoints();
+                ui->range->setText("0.00 cm"); // Set range to 0 if data is invalid
             }
         } else {
             qDebug() << "Error: Invalid data format" << dataString;
             // Clear the detection points if data format is invalid
             clearOldDetectionPoints();
+            ui->range->setText("0.00 cm"); // Set range to 0 if data format is invalid
         }
     }
 }
