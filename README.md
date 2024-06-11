@@ -13,7 +13,6 @@ Perubahan pada Arduino:
   >> Menghentikan servo sementara.
 >  > 
   >> Mematikan laser.
->  > 
 > Fungsi dipanggil di loop utama jika jarak < 50 cm.
 
 Perubahan pada Aplikasi Qt:
