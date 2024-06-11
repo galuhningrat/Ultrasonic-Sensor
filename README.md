@@ -19,20 +19,33 @@ Perubahan pada Arduino:
 
 Perubahan pada Aplikasi Qt:
 > Variabel baru:
+> >
   >> Status aktivasi laser.
+> >
   >> Mode operasi otomatis.
 > Timer baru:
+> >
   >> laserTimer: Mengaktifkan laser selama 2 detik.
+> >
   >> resumeTimer: Melanjutkan operasi normal setelah 2 detik.
 > Fungsi baru:
+> >
   >> handleLaserActivation(): Menangani aktivasi laser.
+> >
   >> resumeOperation(): Melanjutkan operasi normal.
+> >
   >> updateLaserStatus(): Memperbarui status laser di UI.
+> >
 > Logika readSerial() diperbarui:
+> >
   >> Menangani aktivasi laser berdasarkan jarak.
+> >
   >> Mengatur status laser dengan benar.
+> >
 > Fungsi updateDetectionPoint():
+> >
   >> Tidak memperbarui titik deteksi saat laser aktif.
+> >
 >textEdit ditambahkan ke UI untuk menampilkan status laser ("Laser: On" atau "Laser: Off").
 
 Hasil:
