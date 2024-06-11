@@ -29,6 +29,7 @@ Perubahan pada Aplikasi Qt:
   >> laserTimer: Mengaktifkan laser selama 2 detik.
 > >
   >> resumeTimer: Melanjutkan operasi normal setelah 2 detik.
+> >
 > Fungsi baru:
 > >
   >> handleLaserActivation(): Menangani aktivasi laser.
