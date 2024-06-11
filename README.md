@@ -55,23 +55,3 @@ Aplikasi radar dapat mengaktifkan laser selama 2 detik jika objek terdeteksi dal
 Servo berhenti saat laser aktif.
 Status laser ditampilkan di UI.
 Operasi normal dilanjutkan setelah 2 detik.
-
-Kode Tambahan:
->>
-dialog.ui:
-</widget>
-  <widget class="QTextEdit" name="textEdit">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>510</y>
-     <width>61</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Times New Roman</family>
-    </font>
-   </property>
-  </widget>
