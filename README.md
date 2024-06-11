@@ -57,6 +57,7 @@ Status laser ditampilkan di UI.
 Operasi normal dilanjutkan setelah 2 detik.
 
 Kode Tambahan:
+<<
 dialog.ui:
 </widget>
   <widget class="QTextEdit" name="textEdit">
@@ -74,3 +75,4 @@ dialog.ui:
     </font>
    </property>
   </widget>
+>>
