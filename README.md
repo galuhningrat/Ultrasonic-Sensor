@@ -23,6 +23,7 @@ Perubahan pada Aplikasi Qt:
   >> Status aktivasi laser.
 > >
   >> Mode operasi otomatis.
+> >
 > Timer baru:
 > >
   >> laserTimer: Mengaktifkan laser selama 2 detik.
