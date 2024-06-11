@@ -8,7 +8,7 @@ Fitur Baru:
 Perubahan pada Arduino:
 > Ditambahkan pin untuk mengontrol laser dan dikonfigurasi sebagai output.
 > Fungsi baru stopAndActivateLaser():
-  >> Menyalakan laser selama 2 detik.
+  > Menyalakan laser selama 2 detik.
   > Menghentikan servo sementara.
   > Mematikan laser.
 > Fungsi dipanggil di loop utama jika jarak < 50 cm.
