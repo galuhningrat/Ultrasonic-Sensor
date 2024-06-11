@@ -16,7 +16,7 @@ Terakhir, saya menambahkan `textEdit` pada antarmuka pengguna untuk menampilkan 
 Dengan peningkatan ini, aplikasi radar yang saya buat sekarang memiliki kemampuan untuk mengaktifkan laser selama 2 detik jika objek terdeteksi dalam jarak 50 cm. Selama aktivasi laser, servo akan berhenti berputar sementara, dan antarmuka pengguna akan menampilkan status laser yang sesuai. Setelah aktivasi laser dan jeda 2 detik, operasi normal akan dilanjutkan.
 
 
-Arduino IDE:
+**Arduino IDE:**
 #include <Servo.h>
 
 // Servo
@@ -101,7 +101,7 @@ void stopAndActivateLaser() {
 }
 
 
-dialog.h:
+**dialog.h:**
 #ifndef DIALOG_H
 #define DIALOG_H
 
@@ -175,8 +175,8 @@ private:
 #endif // DIALOG_H
 
 
-dialog.cpp:
-#include "dialog.h"
+**dialog.cpp:
+**#include "dialog.h"
 #include "ui_dialog.h"
 #include <QtMath>
 
@@ -424,8 +424,8 @@ Dialog::~Dialog() {
 }
 
 
-dialog.ui:
-</widget>
+**dialog.ui:
+**</widget>
   <widget class="QTextEdit" name="textEdit">
    <property name="geometry">
     <rect>
