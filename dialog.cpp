@@ -7,6 +7,8 @@ Dialog::Dialog(QWidget *parent)
     , r(445.0) // needle radius (pixels)
     , angleOffset(0.05) // needle angle offset (rad)
     , ui(new Ui::Dialog)
+    , laserActive(false)
+    , autoMode(false)
 {
     ui->setupUi(this);
 
@@ -64,6 +66,12 @@ Dialog::Dialog(QWidget *parent)
 
     autoTimer = new QTimer(this); // Initialize timer
     connect(autoTimer, &QTimer::timeout, this, &Dialog::updateServoAuto);
+
+    laserTimer = new QTimer(this); // Initialize laser timer
+    connect(laserTimer, &QTimer::timeout, this, &Dialog::handleLaserActivation);
+
+    resumeTimer = new QTimer(this); // Timer to resume operations
+    connect(resumeTimer, &QTimer::timeout, this, &Dialog::resumeOperation);
 }
 
 void Dialog::readSerial() {
@@ -91,168 +99,162 @@ void Dialog::readSerial() {
                 // Ensure distance is within 0-500 cm
                 if (distance >= 0 && distance <= 500) {
                     qDebug() << "Parsed distance:" << distance;
-                    updateDetectionPoint(angle, distance);
 
                     // Update range label in GUI
                     QString rangeText = QString::number(distance, 'f', 2) + " cm";
                     ui->range->setText(rangeText);
-                } else {
-                    // Set distance to 0 if out of range
-                    distance = 0;
-                    qDebug() << "Parsed distance:" << distance;
 
-                    // Clear the detection points if data is invalid
-                    clearOldDetectionPoints();
-                    ui->range->setText("0.00 cm"); // Set range to 0 if out of range
+                    // Update detection point only if not pausing
+                    if (!laserActive) {
+                        updateDetectionPoint(angle, distance);
+                    }
+
+                    // Check distance for laser activation
+                    if (distance < 50 && !laserActive) { // Activate laser if distance < 50 cm
+                        laserActive = true;
+                        laserTimer->start(2000); // Start laser timer for 2 seconds
+                        // resumeTimer->start(4000); // Start resume timer for 4 seconds (2s laser + 2s pause)
+                        qDebug() << "Laser turned on"; // Debugging: Print laser on status
+                        updateLaserStatus("Laser: On"); // Update GUI to show laser is on
+                    }
+
+                    // Update angle label in GUI
+                    QString angleText = QString::number(angle, 'd', 0);
+                    ui->angle->setText(angleText);
+                } else {
+                    qDebug() << "Error: Distance out of range" << distance;
                 }
             } else {
-                qDebug() << "Error: Invalid data received" << dataString;
-                // Clear the detection points if data is invalid
-                clearOldDetectionPoints();
-                ui->range->setText("0.00 cm"); // Set range to 0 if data is invalid
+                qDebug() << "Error: Incorrect data format received" << dataString;
             }
         } else {
-            qDebug() << "Error: Invalid data format" << dataString;
-            // Clear the detection points if data format is invalid
-            clearOldDetectionPoints();
-            ui->range->setText("0.00 cm"); // Set range to 0 if data format is invalid
+            qDebug() << "Error: Incorrect data format received" << dataString;
         }
     }
 }
 
-void Dialog::updateDetectionPoint(float angle, float distance) {
-    // Clear old detection points first
-    clearOldDetectionPoints();
-
-    if (distance < 500) {  // Ensure distance is within 500 cm
-        float radius = distance * 0.9; // Adjust the scaling factor for the visualization
-        float x = radius * qCos(qDegreesToRadians(angle));
-        float y = radius * qSin(qDegreesToRadians(angle));
-        float xT = x + 505;
-        float yT = -1 * y + 495;
-
-        QPen blackpen(Qt::black);
-        QBrush graybrush(Qt::gray);
-        rect = scene->addRect(xT, yT, 12, 12, blackpen, graybrush);
-        rect->setOpacity(0.75);
-        detectionPoints.append(static_cast<QGraphicsRectItem*>(rect)); // Add new detection point to the list
-
-        qDebug() << "Updated detection point at x:" << xT << "y:" << yT; // Debugging: Print coordinates of detection point
-    } else {
-        qDebug() << "Distance out of range:" << distance; // Debugging: Print distance if out of range
-        clearOldDetectionPoints();
-    }
+void Dialog::handleLaserActivation() {
+    laserActive = false;
+    laserTimer->stop();
+    qDebug() << "Laser turned off"; // Debugging: Print laser off status
+    updateLaserStatus("Laser: Off"); // Update GUI to show laser is off
 }
 
-void Dialog::clearOldDetectionPoints() {
-    // Clear all old detection points from the scene
-    foreach (QGraphicsRectItem* item, detectionPoints) {
-        scene->removeItem(item);
-        delete item;
-    }
-    detectionPoints.clear();
-}
-
-void Dialog::updateServo(QString command)
-{
-    // Update servo angle
-    currAngle = qDegreesToRadians(command.toFloat());
-    t_up = currAngle + angleOffset;
-    t_lo = currAngle - angleOffset;
-    triangle[0] = QPointF(r * qCos(t_up) + 505, -r * qSin(t_up) + 495);
-    triangle[2] = QPointF(r * qCos(t_lo) + 505, -r * qSin(t_lo) + 495);
-    needle->setPolygon(triangle);
-
+void Dialog::updateServo(QString command) {
     if (arduino->isWritable()) {
-        QString message = command + "\n";
-        arduino->write(message.toStdString().c_str());
+        arduino->write(command.toStdString().c_str());
     } else {
-        qDebug() << "Could not write to serial";
+        qDebug() << "Couldn't write to serial!";
     }
 }
 
-Dialog::~Dialog()
-{
-    delete ui;
-}
-
-void Dialog::on_button0_clicked()
-{
-    servoSetting = "0";
-    ui->angle->setText(servoSetting);
-    ui->verticalSlider->setValue(0);
-    updateServo(servoSetting);
-}
-
-void Dialog::on_button45_clicked()
-{
-    servoSetting = "45";
-    ui->verticalSlider->setValue(45);
-    ui->angle->setText(servoSetting);
-    updateServo("45");
-}
-
-void Dialog::on_button90_clicked()
-{
-    servoSetting = "90";
-    ui->verticalSlider->setValue(90);
-    ui->angle->setText(servoSetting);
-    updateServo("90");
-}
-
-void Dialog::on_button135_clicked()
-{
-    servoSetting = "135";
-    ui->verticalSlider->setValue(135);
-    ui->angle->setText(servoSetting);
-    updateServo("135");
-}
-
-void Dialog::on_button180_clicked()
-{
-    servoSetting = "180";
-    ui->verticalSlider->setValue(180);
-    ui->angle->setText(servoSetting);
-    updateServo("180");
-}
-
-void Dialog::on_verticalSlider_valueChanged(int value)
-{
-    servoSetting = QString::number(value);
-    ui->angle->setText(servoSetting);
-    updateServo(servoSetting);
-}
-
-void Dialog::on_button_auto_clicked()
-{
-    if (autoTimer->isActive()) {
-        autoTimer->stop();
-        ui->button_auto->setText("Start Auto");
-    } else {
-        autoTimer->start(1000);
-        ui->button_auto->setText("Stop Auto");
-    }
-}
-
-void Dialog::updateServoAuto()
-{
-    // Function to automatically update the servo (e.g. sweep from 0 to 180 degrees)
-    static bool increasing = true;
+void Dialog::updateServoAuto() {
     static int angle = 0;
+    static bool increasing = true;
 
     if (increasing) {
         angle += 5;
         if (angle >= 180) {
+            angle = 180;
             increasing = false;
         }
     } else {
         angle -= 5;
         if (angle <= 0) {
+            angle = 0;
             increasing = true;
         }
     }
 
-    updateServo(QString::number(angle));
-    ui->angle->setText(QString::number(angle));
-    ui->verticalSlider->setValue(angle);
+    updateServo(QString::number(angle) + "\n");
+    ui->verticalSlider->setValue(angle); // Update slider position
+}
+
+void Dialog::updateDetectionPoint(float angle, float distance) {
+    qDebug() << "Updating detection point at angle:" << angle << "distance:" << distance; // Debugging: Print detection point
+    float radAngle = qDegreesToRadians(angle);
+    float x = distance * qCos(radAngle);
+    float y = distance * qSin(radAngle);
+
+    QGraphicsRectItem* point = scene->addRect(505 + x, 495 - y, 3, 3, QPen(Qt::red), QBrush(Qt::red));
+    detectionPoints.append(point);
+
+    // Update the needle position
+    float t_up = radAngle + angleOffset;
+    float t_lo = radAngle - angleOffset;
+    QPolygonF newTriangle;
+    newTriangle.append(QPointF(r * qCos(t_up) + 505, -r * qSin(t_up) + 495));
+    newTriangle.append(QPointF(505, 495));
+    newTriangle.append(QPointF(r * qCos(t_lo) + 505, -r * qSin(t_lo) + 495));
+    needle->setPolygon(newTriangle);
+
+    // Clear old detection points
+    clearOldDetectionPoints();
+}
+
+void Dialog::clearOldDetectionPoints() {
+    // Remove old points from the scene
+    while (detectionPoints.size() > 50) { // Keep the last 50 points
+        QGraphicsRectItem* point = detectionPoints.takeFirst();
+        scene->removeItem(point);
+        delete point;
+    }
+}
+
+void Dialog::on_button0_clicked() {
+    updateServo("0\n");
+    ui->verticalSlider->setValue(0);
+}
+
+void Dialog::on_button90_clicked() {
+    updateServo("90\n");
+    ui->verticalSlider->setValue(90);
+}
+
+void Dialog::on_button180_clicked() {
+    updateServo("180\n");
+    ui->verticalSlider->setValue(180);
+}
+
+void Dialog::on_verticalSlider_valueChanged(int value) {
+    updateServo(QString::number(value) + "\n");
+}
+
+void Dialog::on_button45_clicked() {
+    updateServo("45\n");
+    ui->verticalSlider->setValue(45);
+}
+
+void Dialog::on_button135_clicked() {
+    updateServo("135\n");
+    ui->verticalSlider->setValue(135);
+}
+
+void Dialog::on_button_auto_clicked() {
+    autoMode = !autoMode;
+
+    if (autoMode) {
+        autoTimer->start(500); // Update servo every 500 ms
+        ui->button_auto->setText("Stop Auto");
+    } else {
+        autoTimer->stop();
+        ui->button_auto->setText("Start Auto");
+    }
+}
+
+void Dialog::resumeOperation() {
+    laserActive = false;
+    qDebug() << "Resuming normal operation"; // Debugging: Print resume status
+    updateLaserStatus("Laser: Off"); // Ensure laser status is off when resuming
+}
+
+void Dialog::updateLaserStatus(const QString &status) {
+    ui->textEdit->setPlainText(status);
+}
+
+Dialog::~Dialog() {
+    if (arduino->isOpen()) {
+        arduino->close();
+    }
+    delete ui;
 }
