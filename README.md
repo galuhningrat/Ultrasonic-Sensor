@@ -56,7 +56,7 @@ Servo berhenti saat laser aktif.
 Status laser ditampilkan di UI.
 Operasi normal dilanjutkan setelah 2 detik.
 
-======================================================================================================================
+============================================================================================
 
 ## Perbaikan dan Perubahan Radar - 13 Juni 2024
 
