@@ -66,9 +66,7 @@ Halo! Dalam iterasi pengembangan radar kali ini, saya fokus pada peningkatan rea
 
 **1. Pergerakan Servo Otomatis:**
 
-* Servo sekarang berosilasi secara otomatis dari 0 hingga 180 derajat dan kembali lagi.
-* Sebelumnya, pergerakan servo hanya bisa diatur secara manual.
-* Perubahan ini menghasilkan simulasi yang lebih realistis dan alami.
+* Servo sekarang berosilasi secara otomatis dari 0 hingga 180 derajat dan kembali lagi dari 180 derajat hingga 0 derajat.
 
 **2. Kontrol Servo yang Ditingkatkan:**
 
