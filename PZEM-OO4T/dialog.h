@@ -40,6 +40,7 @@ private slots:
     void handleLaserActivation();
     void resumeOperation();
     void updateLaserStatus(const QString &status);
+    void setSliderEnabled(bool enabled);
 
 private:
     QGraphicsScene *scene;
@@ -67,5 +68,7 @@ private:
     QTimer *laserTimer;
     QTimer *resumeTimer;
     bool autoMode;
+    bool previousAutoMode;
+    bool previousSliderState;
 };
 #endif // DIALOG_H
