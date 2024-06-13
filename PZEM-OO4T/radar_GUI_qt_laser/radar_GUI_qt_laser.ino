@@ -79,5 +79,5 @@ void stopAndActivateLaser() {
   digitalWrite(laserPin, HIGH); // Turn on the laser
   delay(2000); // Keep the laser on for 2 seconds
   digitalWrite(laserPin, LOW); // Turn off the laser
-  // delay(2000); // Wait for 2 seconds before resuming
+  delay(2000); // Wait for 2 seconds before resuming
 }
