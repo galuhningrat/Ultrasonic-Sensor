@@ -99,8 +99,3 @@ Halo! Dalam iterasi pengembangan radar kali ini, saya fokus pada peningkatan rea
 **Kesimpulan:**
 
 Perubahan ini meningkatkan realisme dan kegunaan simulasi radar secara signifikan. Pengguna sekarang dapat menikmati pengalaman yang lebih imersif dan mudah dikendalikan.
-
-**Catatan:**
-
-* Pastikan untuk mengimplementasikan fungsi yang disebutkan dalam ringkasan (misalnya `setSliderEnabled()`, dll.) sesuai dengan logika aplikasi Anda.
-
