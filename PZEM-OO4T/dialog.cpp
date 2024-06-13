@@ -113,7 +113,14 @@ void Dialog::readSerial() {
                     if (distance < 50 && !laserActive) { // Activate laser if distance < 50 cm
                         laserActive = true;
                         laserTimer->start(2000); // Start laser timer for 2 seconds
-                        // resumeTimer->start(4000); // Start resume timer for 4 seconds (2s laser + 2s pause)
+                        // Save current auto mode and slider state
+                        previousAutoMode = autoMode;
+                        previousSliderState = ui->verticalSlider->isEnabled();
+
+                        if (autoMode) {
+                            autoTimer->stop(); // Stop auto timer
+                        }
+                        setSliderEnabled(false); // Disable the slider
                         qDebug() << "Laser turned on"; // Debugging: Print laser on status
                         updateLaserStatus("Laser: On"); // Update GUI to show laser is on
                     }
@@ -133,11 +140,21 @@ void Dialog::readSerial() {
     }
 }
 
+void Dialog::setSliderEnabled(bool enabled) {
+    ui->verticalSlider->setEnabled(enabled);
+}
+
 void Dialog::handleLaserActivation() {
     laserActive = false;
     laserTimer->stop();
     qDebug() << "Laser turned off"; // Debugging: Print laser off status
     updateLaserStatus("Laser: Off"); // Update GUI to show laser is off
+
+    // Restore previous auto mode and slider state
+    if (previousAutoMode) {
+        autoTimer->start(500); // Resume auto timer
+    }
+    setSliderEnabled(previousSliderState); // Re-enable the slider if it was previously enabled
 }
 
 void Dialog::updateServo(QString command) {
