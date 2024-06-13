@@ -113,7 +113,7 @@ void Dialog::readSerial() {
                     if (distance < 50 && !laserActive) { // Activate laser if distance < 50 cm
                         laserActive = true;
                         laserTimer->start(2000); // Start laser timer for 2 seconds
-                        resumeTimer->start(4000); // Start resume timer for 4 seconds (2s laser + 2s pause)
+                        // resumeTimer->start(4000); // Start resume timer for 4 seconds (2s laser + 2s pause)
                         qDebug() << "Laser turned on"; // Debugging: Print laser on status
                         updateLaserStatus("Laser: On"); // Update GUI to show laser is on
                     }
@@ -150,8 +150,22 @@ void Dialog::updateServo(QString command) {
 
 void Dialog::updateServoAuto() {
     static int angle = 0;
-    angle += 5;
-    if (angle > 180) angle = 0;
+    static bool increasing = true;
+
+    if (increasing) {
+        angle += 5;
+        if (angle >= 180) {
+            angle = 180;
+            increasing = false;
+        }
+    } else {
+        angle -= 5;
+        if (angle <= 0) {
+            angle = 0;
+            increasing = true;
+        }
+    }
+
     updateServo(QString::number(angle) + "\n");
     ui->verticalSlider->setValue(angle); // Update slider position
 }
