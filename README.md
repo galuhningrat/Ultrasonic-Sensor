@@ -28,16 +28,3 @@ Proyek ini merupakan pengembangan lanjutan dari simulasi radar Arduino yang tela
 * Penyimpanan status mode otomatis dan keadaan slider sebelum aktivasi laser
 * Pemulihan status setelah laser dinonaktifkan
 * Pencegahan perubahan pengaturan yang tidak diinginkan saat laser aktif
-
-#### Teknologi yang Digunakan
-
-* Arduino (untuk kontrol hardware)
-* Qt (untuk aplikasi antarmuka pengguna)
-
-#### Kontribusi
-
-Kontribusi untuk pengembangan lebih lanjut sangat diterima. Beberapa area yang dapat dikembangkan meliputi:
-
-* Pemodelan lingkungan yang lebih kompleks
-* Penanganan objek bergerak
-* Integrasi dengan data radar yang sebenarnya
