@@ -1,40 +1,43 @@
 ## Perbaikan dan Perubahan Radar - 13 Juni 2024
-Simulasi Radar Arduino dengan Fitur Laser
-Deskripsi Proyek
+
+### Simulasi Radar Arduino dengan Fitur Laser
+
+#### Deskripsi Proyek
+
 Proyek ini merupakan pengembangan lanjutan dari simulasi radar Arduino yang telah ada sebelumnya. Fokus utama pengembangan adalah meningkatkan realisme dan pengalaman pengguna melalui penambahan fitur baru dan penyempurnaan kontrol. Fitur-fitur utama yang ditambahkan meliputi:
 
-Implementasi laser yang diaktifkan berdasarkan jarak objek
-Pergerakan servo yang otomatis dan lebih realistis
-Penyempurnaan kontrol dan penyimpanan status aplikasi
+* Implementasi laser yang diaktifkan berdasarkan jarak objek
+* Pergerakan servo yang otomatis dan lebih realistis
+* Penyempurnaan kontrol dan penyimpanan status aplikasi
 
-Fitur Utama
-1. Fitur Laser
+#### Fitur Utama
 
-Laser diaktifkan ketika objek terdeteksi dalam jarak tertentu (kurang dari 50 cm)
-Durasi aktivasi laser selama 2 detik
-Status laser ditampilkan secara real-time di antarmuka pengguna
+**1. Fitur Laser**
 
-2. Pergerakan Servo Otomatis
+* Laser diaktifkan ketika objek terdeteksi dalam jarak tertentu (kurang dari 50 cm)
+* Durasi aktivasi laser selama 2 detik
+* Status laser ditampilkan secara real-time di antarmuka pengguna
 
-Servo berosilasi secara otomatis dari 0 hingga 180 derajat dan kembali ke 0 derajat
-Pergerakan servo yang lebih mulus dan realistis
+**2. Pergerakan Servo Otomatis**
 
-3. Kontrol yang Ditingkatkan
+* Servo berosilasi secara otomatis dari 0 hingga 180 derajat dan kembali ke 0 derajat
+* Pergerakan servo yang lebih mulus dan realistis
 
-Penyimpanan status mode otomatis dan keadaan slider sebelum aktivasi laser
-Pemulihan status setelah laser dinonaktifkan
-Pencegahan perubahan pengaturan yang tidak diinginkan saat laser aktif
+**3. Kontrol yang Ditingkatkan**
 
-Teknologi yang Digunakan
+* Penyimpanan status mode otomatis dan keadaan slider sebelum aktivasi laser
+* Pemulihan status setelah laser dinonaktifkan
+* Pencegahan perubahan pengaturan yang tidak diinginkan saat laser aktif
 
-Arduino (untuk kontrol hardware)
-Qt (untuk aplikasi antarmuka pengguna)
+#### Teknologi yang Digunakan
 
-Kontribusi
+* Arduino (untuk kontrol hardware)
+* Qt (untuk aplikasi antarmuka pengguna)
+
+#### Kontribusi
+
 Kontribusi untuk pengembangan lebih lanjut sangat diterima. Beberapa area yang dapat dikembangkan meliputi:
 
-Pemodelan lingkungan yang lebih kompleks
-Penanganan objek bergerak
-Integrasi dengan data radar yang sebenarnya
-
-(https://mf234.blogspot.com/2024/06/research-analysis-of-arduino-radar.html#more)
+* Pemodelan lingkungan yang lebih kompleks
+* Penanganan objek bergerak
+* Integrasi dengan data radar yang sebenarnya
