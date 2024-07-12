@@ -2,9 +2,9 @@
 
 ### Simulasi Radar Arduino dengan Fitur Laser
 
-#### Deskripsi Proyek
+#### Deskripsi Project
 
-Proyek ini merupakan pengembangan lanjutan dari simulasi radar Arduino yang telah ada sebelumnya. Fokus utama pengembangan adalah meningkatkan realisme dan pengalaman pengguna melalui penambahan fitur baru dan penyempurnaan kontrol. Fitur-fitur utama yang ditambahkan meliputi:
+Project ini merupakan pengembangan lanjutan dari simulasi radar Arduino yang telah ada sebelumnya. Fokus utama pengembangan adalah meningkatkan realisme dan pengalaman pengguna melalui penambahan fitur baru dan penyempurnaan kontrol. Fitur-fitur utama yang ditambahkan meliputi:
 
 * Implementasi laser yang diaktifkan berdasarkan jarak objek
 * Pergerakan servo yang otomatis dan lebih realistis
